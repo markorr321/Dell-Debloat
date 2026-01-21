@@ -1,0 +1,32 @@
+**********************
+Windows PowerShell transcript start
+Start time: 20260121144547
+Username: WORKGROUP\SYSTEM
+RunAs User: WORKGROUP\SYSTEM
+Configuration Name: 
+Machine: AR-9SZWYB4 (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -executionPolicy bypass -file C:\WINDOWS\IMECache\HealthScripts\6f112cb3-f4e7-44ab-a97b-c76ce28bab26_1\remediate.ps1
+Process ID: 20564
+PSVersion: 5.1.26100.6584
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.6584
+BuildVersion: 10.0.26100.6584
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Script: Remediate-DellSupportAssist.ps1
+=== Dell SupportAssist Remediation ===
+Found  application(s) to remove:
+  - Dell Supportassist
+Uninstalling Dell Supportassist ...
+  Using UninstallString
+  MSI GUID: {F883F4A3-B6A9-40E8-907E-40B91097982E}
+  -> Success (Exit code: 0)
+=== Remediation Complete ===
+Log: C:\Windows\Temp\Remediate-DellSupportAssist_20260121_144547.log
+**********************
+Windows PowerShell transcript end
+End time: 20260121144820
+**********************
