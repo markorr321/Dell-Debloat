@@ -1,0 +1,10 @@
+<![LOG[write output done. output = Script: Remediate-DellSupportAssist.ps1
+=== Dell SupportAssist Remediation ===
+Found  application(s) to remove:
+  - Dell Supportassist
+Uninstalling Dell Supportassist ...
+  Using UninstallString
+  MSI GUID: {F883F4A3-B6A9-40E8-907E-40B91097982E}
+  -> Success (Exit code: 0)
+=== Remediation Complete ===
+Log: C:\Windows\Temp\Remediate-DellSupportAssist_20260121_144547.log
