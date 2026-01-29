@@ -18,10 +18,16 @@ $ScriptName = "Detect-DellSupportAssist.ps1"
 #endregion
 
 #region -------- Logging Setup --------
+# Create log folder if it doesn't exist
+$LogFolder = "C:\Windows\Temp\Remediate-DellSupportAssist"
+if (-not (Test-Path -Path $LogFolder)) {
+    New-Item -Path $LogFolder -ItemType Directory -Force | Out-Null
+}
 # Create transcript log file with timestamp for local device logging
 # Transcript captures all output for troubleshooting on the device
-$LogPath = "C:\Windows\Temp\Detect-DellSupportAssist_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
+$LogPath = "$LogFolder\Detect-DellSupportAssist_$(Get-Date -Format 'yyyyMMdd_hhmmsstt').log"
 Start-Transcript -Path $LogPath -Force | Out-Null
+Write-Output "Start Time: $(Get-Date -Format 'MM/dd/yyyy hh:mm:ss tt') $((Get-TimeZone).StandardName)"
 #endregion
 
 #region -------- Initialize Variables --------
@@ -39,30 +45,6 @@ try {
         'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
         'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
     )
-
-    #region -------- Per-User Registry Paths --------
-    # Mount HKU (HKEY_USERS) drive if not already available
-    # This allows access to per-user registry hives
-    if (-not (Get-PSDrive -Name HKU -ErrorAction SilentlyContinue)) {
-        New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS -ErrorAction SilentlyContinue | Out-Null
-    }
-
-    # Add per-user uninstall paths for all loaded user profiles
-    # NOTE: Only works for currently logged-in users whose hives are loaded
-    # Users who haven't logged in recently won't have their NTUSER.DAT mounted
-    try {
-        $userSids = Get-ChildItem 'HKU:\' -ErrorAction SilentlyContinue | 
-            Where-Object { $_.Name -match 'S-1-5-21-' }  # Filter for actual user SIDs (not system accounts)
-        
-        foreach ($sid in $userSids) {
-            $userPath = "HKU:\$($sid.PSChildName)\Software\Microsoft\Windows\CurrentVersion\Uninstall\*"
-            $registryPaths += $userPath
-        }
-    }
-    catch {
-        # Silently continue if per-user paths cannot be enumerated
-    }
-    #endregion
 
     # Filter for Dell SupportAssist applications by DisplayName
     $apps = Get-ItemProperty -Path $registryPaths -ErrorAction SilentlyContinue | 
@@ -100,6 +82,7 @@ catch {
 }
 finally {
     #region -------- Cleanup --------
+    Write-Output "End Time: $(Get-Date -Format 'MM/dd/yyyy hh:mm:ss tt') $((Get-TimeZone).StandardName)"
     Write-Output "Log: $LogPath"
     Stop-Transcript | Out-Null
     #endregion
